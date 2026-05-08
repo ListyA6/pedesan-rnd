@@ -9,12 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#0D0B09; --surface:#141210; --surface-2:#1B1915; --surface-3:#222018;
-  --amber:#E8991A; --amber-glow:rgba(232,153,26,.12); --amber-dim:#7A5010;
-  --chili:#C83B2A; --chili-glow:rgba(200,59,42,.1);
-  --green:#3DAA6E; --green-glow:rgba(61,170,110,.1);
-  --text:#EDE8DE; --text-mid:#A09080; --text-muted:#5C5448;
-  --border:#272420; --border-hi:#3A3530;
+  --bg:#FAF5EE; --surface:#FFFFFF; --surface-2:#F5EDE0; --surface-3:#EDE0CE;
+  --amber:#C0392B; --amber-glow:rgba(192,57,43,.08); --amber-dim:#8B2015;
+  --chili:#8B2015; --chili-glow:rgba(139,32,21,.08);
+  --green:#2D7A52; --green-glow:rgba(45,122,82,.1);
+  --text:#1C110D; --text-mid:#5C4035; --text-muted:#8C7060;
+  --border:#E0CDB5; --border-hi:#C8B09A;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{font-size:16px;background:var(--bg);}
@@ -29,7 +29,7 @@ body{
 .header{padding:24px 20px 20px;position:relative;overflow:hidden;}
 .header::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 90% -10%,rgba(232,153,26,.07) 0%,transparent 70%);
+  background:radial-gradient(ellipse 80% 60% at 90% -10%,rgba(192,57,43,.06) 0%,transparent 70%);
   pointer-events:none;
 }
 .header::after{
@@ -67,7 +67,7 @@ body{
 .hypo p{font-size:12px;color:var(--text-muted);line-height:1.6;}
 
 /* ─── TAB NAV ─── */
-.tab-nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.tab-nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);border-top:1px solid var(--border);position:sticky;top:0;z-index:200;}
 .tab-btn{flex:1;padding:14px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
 .tab-btn.active{color:var(--amber);border-bottom-color:var(--amber);}
 
@@ -214,7 +214,7 @@ body{
 /* Submit button */
 .submit-btn{
   width:100%;padding:18px;background:var(--amber);
-  border:none;border-radius:8px;color:#0D0B09;
+  border:none;border-radius:8px;color:#FAF5EE;
   font-family:'Anton',sans-serif;font-size:20px;
   letter-spacing:3px;cursor:pointer;
   transition:opacity .2s;margin-top:4px;
