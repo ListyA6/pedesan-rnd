@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>EXP 02 — Babat + Usus Run 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FAF5EE; --surface:#FFFFFF; --surface-2:#F5EDE0; --surface-3:#EDE0CE;
+  --amber:#C0392B; --amber-glow:rgba(192,57,43,.08); --amber-dim:#8B2015;
+  --chili:#8B2015; --chili-glow:rgba(139,32,21,.08);
+  --green:#2D7A52; --green-glow:rgba(45,122,82,.1);
+  --text:#1C110D; --text-mid:#5C4035; --text-muted:#8C7060;
+  --border:#E0CDB5; --border-hi:#C8B09A;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;background:var(--bg);}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  color:var(--text);background:var(--bg);
+  min-height:100vh;max-width:480px;
+  margin:0 auto;padding-bottom:100px;overflow-x:hidden;
+}
+
+/* ─── HEADER ─── */
+.header{padding:24px 20px 20px;position:relative;overflow:hidden;}
+.header::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 90% -10%,rgba(192,57,43,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.header::after{
+  content:'';position:absolute;
+  bottom:0;left:20px;right:20px;height:1px;
+  background:linear-gradient(90deg,var(--amber-dim),transparent);
+}
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--text-muted);text-decoration:none;
+  margin-bottom:14px;letter-spacing:1px;
+}
+.back-link:active{color:var(--amber);}
+.exp-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:3px;color:var(--amber);text-transform:uppercase;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px;
+}
+.exp-eyebrow::before{content:'';width:16px;height:1px;background:var(--amber);}
+.exp-title{
+  font-family:'Anton',sans-serif;font-size:48px;
+  line-height:.92;letter-spacing:1px;text-transform:uppercase;
+}
+.exp-title .accent{color:var(--amber);}
+.exp-title .plus{font-size:30px;color:var(--text-muted);margin:0 4px;}
+.exp-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;margin-top:6px;}
+.exp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 9px;border-radius:2px;border:1px solid var(--border-hi);color:var(--text-muted);background:var(--surface);}
+.chip.amber{border-color:var(--amber-dim);color:var(--amber);}
+
+/* Hypothesis */
+.hypo{margin:12px 20px 16px;padding:12px 14px 12px 16px;background:var(--surface);border-left:2px solid var(--amber-dim);}
+.hypo-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--amber);margin-bottom:4px;}
+.hypo p{font-size:12px;color:var(--text-muted);line-height:1.6;}
+
+/* ─── DELTA BANNER ─── */
+.delta-banner{
+  margin:0 20px 16px;
+  background:var(--amber-glow);
+  border:1px solid var(--amber-dim);
+  border-radius:6px;
+  padding:12px 14px;
+}
+.delta-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--amber);margin-bottom:8px;text-transform:uppercase;}
+.delta-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(192,57,43,.1);font-size:12px;}
+.delta-row:last-child{border-bottom:none;}
+.delta-key{color:var(--text-muted);}
+.delta-change{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);font-weight:600;}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);border-top:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.tab-btn{flex:1;padding:14px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.tab-btn.active{color:var(--amber);border-bottom-color:var(--amber);}
+
+/* ─── PANES ─── */
+.tab-pane{display:none;padding:20px;animation:fadeUp .22s ease;}
+.tab-pane.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ─── BAHAN ─── */
+.protein-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+.protein-card{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:16px 12px;text-align:center;position:relative;overflow:hidden;}
+.protein-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber);}
+.pc-weight{font-family:'Anton',sans-serif;font-size:38px;color:var(--amber);line-height:1;}
+.pc-unit{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:2px;}
+.pc-name{font-size:14px;color:var(--text);font-weight:500;}
+
+.ing-group{margin-bottom:22px;}
+.ig-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.ig-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.ing-row{display:flex;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--surface-3);gap:10px;}
+.ing-row:last-child{border-bottom:none;}
+.ing-dot{width:5px;height:5px;border-radius:50%;background:var(--amber-dim);margin-top:7px;flex-shrink:0;}
+.ing-dot.changed{background:var(--amber);}
+.ing-name{flex:1;font-size:14px;color:var(--text);line-height:1.4;}
+.ing-note{display:block;font-size:11px;color:var(--text-muted);font-style:italic;margin-top:2px;}
+.ing-qty{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--amber);white-space:nowrap;padding-top:1px;}
+.ing-qty.changed{color:var(--amber);text-decoration:none;}
+.changed-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--amber);background:var(--amber-glow);border:1px solid var(--amber-dim);border-radius:2px;padding:1px 5px;margin-left:4px;vertical-align:middle;}
+
+.seasoning-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 4px;}
+.sg-card{background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:10px 12px;position:relative;}
+.sg-card.changed{border-color:var(--amber-dim);background:var(--amber-glow);}
+.sg-name{font-size:11px;color:var(--text-muted);margin-bottom:3px;}
+.sg-val{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--text);line-height:1;}
+.sg-pct{position:absolute;top:8px;right:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amber);}
+
+/* ─── PROSES ─── */
+.presto-diagram{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 16px 16px;margin-bottom:22px;}
+.pd-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:14px;}
+.flow-row{display:flex;align-items:center;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.flow-row::-webkit-scrollbar{display:none;}
+.flow-node{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;}
+.fn-circle{width:54px;height:54px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid var(--border);background:var(--surface-2);font-family:'IBM Plex Mono',monospace;}
+.fn-circle.amber{border-color:var(--amber);background:var(--amber-glow);}
+.fn-circle.green{border-color:var(--green);background:var(--green-glow);}
+.fn-circle.chili{border-color:var(--chili);background:var(--chili-glow);}
+.fn-num{font-size:18px;font-weight:600;color:var(--amber);line-height:1;}
+.fn-unit{font-size:9px;color:var(--text-muted);}
+.fn-emoji{font-size:22px;}
+.fn-label{font-size:10px;color:var(--text-muted);text-align:center;max-width:60px;line-height:1.3;font-family:'IBM Plex Mono',monospace;}
+.flow-line{flex:1;min-width:12px;height:2px;background:var(--border);margin-bottom:18px;}
+.flow-line.amber{background:var(--amber-dim);}
+.totals-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.tb-item{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);}
+.tb-item strong{color:var(--amber);}
+
+.step-list{display:flex;flex-direction:column;gap:10px;}
+.step-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .2s;}
+.step-card.is-done{border-color:var(--green);opacity:.55;}
+.step-card.is-open{border-color:var(--border-hi);}
+.step-head{display:flex;align-items:center;padding:13px 14px;gap:12px;cursor:pointer;user-select:none;}
+.sn{font-family:'Anton',sans-serif;font-size:32px;line-height:1;color:var(--surface-3);width:36px;flex-shrink:0;transition:color .2s;}
+.step-card.is-open .sn{color:var(--amber);}
+.step-card.is-done .sn{color:var(--green);}
+.step-meta{flex:1;min-width:0;}
+.step-name{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text);}
+.step-desc{font-size:12px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.step-badge{flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:5px 9px;min-width:42px;}
+.sb-val{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--amber);line-height:1;}
+.sb-unit{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);}
+.done-mark{display:none;font-size:18px;color:var(--green);flex-shrink:0;}
+.step-card.is-done .done-mark{display:block;}
+.step-card.is-done .step-badge{display:none;}
+.step-body{display:none;padding:0 14px 14px;}
+.step-body.is-open{display:block;}
+.step-divider{height:1px;background:var(--border);margin-bottom:14px;}
+.step-text{font-size:14px;line-height:1.7;color:var(--text);}
+.step-text strong{color:var(--amber);}
+.callout{margin-top:10px;padding:10px 12px;border-radius:0 5px 5px 0;font-size:12px;line-height:1.5;color:var(--text-muted);}
+.callout.warn{border-left:2px solid var(--chili);background:var(--chili-glow);}
+.callout.tip{border-left:2px solid var(--amber-dim);background:var(--amber-glow);}
+.check-btn{width:100%;margin-top:14px;padding:12px;background:none;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.check-btn:active{border-color:var(--green);color:var(--green);}
+.step-card.is-done .check-btn{border-color:var(--green);color:var(--green);}
+
+/* ─── LOG ─── */
+.log-section{margin-bottom:24px;}
+.ls-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--amber);text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border);}
+.log-field{margin-bottom:14px;}
+.log-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);margin-bottom:7px;letter-spacing:.5px;}
+.log-input,.log-textarea{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none;}
+.log-input:focus,.log-textarea:focus{border-color:var(--amber);}
+.log-textarea{min-height:80px;resize:vertical;line-height:1.6;}
+
+.score-row{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.score-row::-webkit-scrollbar{display:none;}
+.score-btn{
+  flex-shrink:0;width:34px;height:34px;
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:5px;color:var(--text-muted);
+  font-family:'IBM Plex Mono',monospace;font-size:13px;
+  cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.score-btn.sel{background:var(--amber-glow);border-color:var(--amber);color:var(--amber);font-weight:600;}
+.score-btn:active{transform:scale(.93);}
+.score-display{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);margin-top:5px;height:16px;}
+
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;}
+.chip-sel{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  padding:6px 12px;border-radius:3px;
+  border:1px solid var(--border);
+  color:var(--text-muted);background:var(--surface-2);
+  cursor:pointer;transition:all .15s;
+}
+.chip-sel.sel{border-color:var(--amber);color:var(--amber);background:var(--amber-glow);}
+.chip-sel:active{transform:scale(.96);}
+
+.photo-note{
+  background:var(--surface-2);border:1px dashed var(--border-hi);
+  border-radius:8px;padding:16px;text-align:center;margin-bottom:14px;
+}
+.photo-note .pn-icon{font-size:28px;margin-bottom:6px;}
+.photo-note p{font-size:12px;color:var(--text-muted);line-height:1.5;}
+.photo-note strong{color:var(--amber);}
+
+.submit-btn{
+  width:100%;padding:18px;background:var(--amber);
+  border:none;border-radius:8px;color:#FAF5EE;
+  font-family:'Anton',sans-serif;font-size:20px;
+  letter-spacing:3px;cursor:pointer;transition:opacity .2s;margin-top:4px;
+}
+.submit-btn:active{opacity:.85;}
+.submit-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--text-muted);text-align:center;margin-top:10px;line-height:1.6;
+}
+.submit-sub a{color:var(--amber);}
+
+.overall-score-wrap{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:8px;padding:20px;text-align:center;margin-bottom:16px;
+}
+.os-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;}
+.os-val{font-family:'Anton',sans-serif;font-size:64px;line-height:1;color:var(--amber);}
+.os-denom{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text-muted);}
+
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="back-link" href="index.html">← Semua Experiment</a>
+  <div class="exp-eyebrow">Ghost Kitchen R&D · 2026-05-11</div>
+  <div class="exp-title">EXP <span class="accent">#02</span><br>BABAT<span class="plus">+</span>USUS</div>
+  <div class="exp-sub">SURABAYAN BASE · RUN 2 · MORE ACID + KETUMBAR</div>
+  <div class="exp-chips">
+    <span class="chip amber">No Sambal</span>
+    <span class="chip">750g Protein</span>
+    <span class="chip">Ketumbar 2×</span>
+    <span class="chip">Asem 2×</span>
+    <span class="chip">Salt 3%</span>
+    <span class="chip">30 Mnt Presto</span>
+  </div>
+</header>
+
+<div class="hypo">
+  <div class="hypo-label">Hypothesis</div>
+  <p>Dari Exp 01: base flavor sudah ada tapi kurang depth. Run 2 test: ketumbar double, asem double, salt naik ke 3%, air dikurangi jadi 1L (konsentrasi bumbu lebih pekat), dan pressure lebih lama (30 mnt total) untuk textur yang lebih tender.</p>
+</div>
+
+<div class="delta-banner">
+  <div class="delta-label">↑ Perubahan dari Exp 01</div>
+  <div class="delta-row"><span class="delta-key">Protein</span><span class="delta-change">500g → 750g</span></div>
+  <div class="delta-row"><span class="delta-key">Ketumbar</span><span class="delta-change">3 sdm → 6 sdm</span></div>
+  <div class="delta-row"><span class="delta-key">Asam Jawa</span><span class="delta-change">¾ sdt → 1½ sdt</span></div>
+  <div class="delta-row"><span class="delta-key">Garam</span><span class="delta-change">2% → 3% (22–23g)</span></div>
+  <div class="delta-row"><span class="delta-key">Air</span><span class="delta-change">1.5L → 1L</span></div>
+  <div class="delta-row"><span class="delta-key">Pressure Total</span><span class="delta-change">25 mnt → 30 mnt</span></div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('bahan',this)">Bahan</button>
+  <button class="tab-btn" onclick="switchTab('proses',this)">Proses</button>
+  <button class="tab-btn" onclick="switchTab('log',this)">Log</button>
+</nav>
+
+<!-- ════ BAHAN ════ -->
+<div id="pane-bahan" class="tab-pane active">
+
+  <div class="protein-row">
+    <div class="protein-card">
+      <div class="pc-weight">375</div>
+      <div class="pc-unit">gram</div>
+      <div class="pc-name">Babat Sapi</div>
+    </div>
+    <div class="protein-card">
+      <div class="pc-weight">375</div>
+      <div class="pc-unit">gram</div>
+      <div class="pc-name">Usus Sapi</div>
+    </div>
+  </div>
+
+  <div class="ing-group">
+    <div class="ig-label">Pre-Soak</div>
+    <div class="ing-row">
+      <div class="ing-dot"></div>
+      <div class="ing-name">Baking Soda<span class="ing-note">larutkan di air · rendam 15–20 mnt · bilas bersih</span></div>
+      <div class="ing-qty">½ sdt</div>
+    </div>
+  </div>
+
+  <div class="ing-group">
+    <div class="ig-label">Bumbu Halus</div>
+    <div class="ing-row"><div class="ing-dot"></div><div class="ing-name">Bawang Merah</div><div class="ing-qty">15 butir</div></div>
+    <div class="ing-row"><div class="ing-dot"></div><div class="ing-name">Bawang Putih</div><div class="ing-qty">7 siung</div></div>
+    <div class="ing-row">
+      <div class="ing-dot"></div>
+      <div class="ing-name">Kunyit<span class="ing-note">bakar di api langsung sampai kulit gosong</span></div>
+      <div class="ing-qty">25–30g</div>
+    </div>
+    <div class="ing-row">
+      <div class="ing-dot changed"></div>
+      <div class="ing-name">Ketumbar <span class="changed-tag">2×</span><span class="ing-note">sangrai dulu sampai harum</span></div>
+      <div class="ing-qty changed">6 sdm</div>
+    </div>
+    <div class="ing-row">
+      <div class="ing-dot"></div>
+      <div class="ing-name">Kemiri<span class="ing-note">sangrai · buat paste</span></div>
+      <div class="ing-qty">15g</div>
+    </div>
+    <div class="ing-row"><div class="ing-dot"></div><div class="ing-name">Jahe</div><div class="ing-qty">3 cm</div></div>
+    <div class="ing-row">
+      <div class="ing-dot"></div>
+      <div class="ing-name">Lengkuas<span class="ing-note">buat paste</span></div>
+      <div class="ing-qty">40–50g</div>
+    </div>
+  </div>
+
+  <div class="ing-group">
+    <div class="ig-label">Aromatics</div>
+    <div class="ing-row"><div class="ing-dot"></div><div class="ing-name">Daun Salam</div><div class="ing-qty">5 lembar</div></div>
+    <div class="ing-row"><div class="ing-dot"></div><div class="ing-name">Serai <span class="ing-note">geprek</span></div><div class="ing-qty">3 batang</div></div>
+    <div class="ing-row"><div class="ing-dot"></div><div class="ing-name">Daun Jeruk <span class="ing-note">buang tulang daun</span></div><div class="ing-qty">7 lembar</div></div>
+  </div>
+
+  <div class="ing-group">
+    <div class="ig-label">Seasoning — dari 750g protein</div>
+    <div class="seasoning-grid">
+      <div class="sg-card changed"><div class="sg-pct">3%</div><div class="sg-name">Garam</div><div class="sg-val">22–23g</div></div>
+      <div class="sg-card"><div class="sg-pct">2%</div><div class="sg-name">Gula Pasir</div><div class="sg-val">15g</div></div>
+      <div class="sg-card"><div class="sg-pct">2%</div><div class="sg-name">Gula Merah</div><div class="sg-val">15g</div></div>
+      <div class="sg-card"><div class="sg-pct">2%</div><div class="sg-name">MSG</div><div class="sg-val">15g</div></div>
+    </div>
+    <div class="ing-row" style="margin-top:8px;">
+      <div class="ing-dot changed"></div>
+      <div class="ing-name">Asam Jawa <span class="changed-tag">2×</span></div>
+      <div class="ing-qty changed">1½ sdt</div>
+    </div>
+  </div>
+
+  <div class="ing-group">
+    <div class="ig-label">Liquid</div>
+    <div class="ing-row">
+      <div class="ing-dot changed"></div>
+      <div class="ing-name">Air <span class="changed-tag">↓</span><span class="ing-note">lebih sedikit → bumbu lebih pekat saat pressure</span></div>
+      <div class="ing-qty changed">1 liter</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════ PROSES ════ -->
+<div id="pane-proses" class="tab-pane">
+
+  <div class="presto-diagram">
+    <div class="pd-title">PRESSURE SEQUENCE</div>
+    <div class="flow-row">
+      <div class="flow-node">
+        <div class="fn-circle amber"><span class="fn-emoji">🥩</span></div>
+        <div class="fn-label">Babat<br>masuk</div>
+      </div>
+      <div class="flow-line amber"></div>
+      <div class="flow-node">
+        <div class="fn-circle amber"><div class="fn-num">15</div><div class="fn-unit">mnt</div></div>
+        <div class="fn-label">setelah<br>pressure</div>
+      </div>
+      <div class="flow-line"></div>
+      <div class="flow-node">
+        <div class="fn-circle chili"><span class="fn-emoji">🔓</span></div>
+        <div class="fn-label" style="color:var(--chili)">RELEASE<br>+USUS</div>
+      </div>
+      <div class="flow-line amber"></div>
+      <div class="flow-node">
+        <div class="fn-circle amber"><div class="fn-num">15</div><div class="fn-unit">mnt</div></div>
+        <div class="fn-label">babat+<br>usus</div>
+      </div>
+      <div class="flow-line"></div>
+      <div class="flow-node">
+        <div class="fn-circle green"><span class="fn-emoji">♨️</span></div>
+        <div class="fn-label" style="color:var(--green)">REDUCE<br>DRY</div>
+      </div>
+    </div>
+    <div class="totals-bar">
+      <div class="tb-item">🥩 Babat: <strong>~30 mnt</strong></div>
+      <div class="tb-item">🫀 Usus: <strong>15 mnt</strong></div>
+      <div class="tb-item">♨️ Reduce: <strong>20–30 mnt</strong></div>
+    </div>
+  </div>
+
+  <div class="step-list">
+
+    <div class="step-card is-open" id="s1">
+      <div class="step-head" onclick="toggleStep('s1')">
+        <div class="sn">01</div>
+        <div class="step-meta"><div class="step-name">Pre-Soak</div><div class="step-desc">Baking soda — deodorize & tenderize</div></div>
+        <div class="step-badge"><div class="sb-val">20</div><div class="sb-unit">mnt</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body is-open" id="sb1">
+        <div class="step-divider"></div>
+        <div class="step-text">Larutkan <strong>½ sdt baking soda</strong> dalam air. Masukkan babat dan usus, rendam <strong>15–20 menit</strong>. Bilas bersih di bawah air mengalir.</div>
+        <div class="callout tip">💡 Baking soda menaikkan pH, mempercepat breakdown kolagen, bantu hilangkan bau. Bilas sampai habis biar tidak pahit.</div>
+        <button class="check-btn" onclick="markDone('s1')">✓ SELESAI</button>
+      </div>
+    </div>
+
+    <div class="step-card" id="s2">
+      <div class="step-head" onclick="toggleStep('s2')">
+        <div class="sn">02</div>
+        <div class="step-meta"><div class="step-name">Prep Bumbu</div><div class="step-desc">Sangrai, bakar, blend jadi paste</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body" id="sb2">
+        <div class="step-divider"></div>
+        <div class="step-text"><strong>Sangrai</strong> ketumbar (<strong>6 sdm</strong>) dan kemiri terpisah. <strong>Bakar kunyit</strong> di api langsung 30–60 detik per sisi sampai kulit gosong. Blender semua bumbu halus jadi <strong>paste halus</strong>.</div>
+        <div class="callout warn">⚠️ Ketumbar 2× — sangrai lebih hati-hati, jangan sampai gosong.</div>
+        <button class="check-btn" onclick="markDone('s2')">✓ SELESAI</button>
+      </div>
+    </div>
+
+    <div class="step-card" id="s3">
+      <div class="step-head" onclick="toggleStep('s3')">
+        <div class="sn">03</div>
+        <div class="step-meta"><div class="step-name">Presto #1 — Babat</div><div class="step-desc">Babat only · 15 mnt setelah pressure</div></div>
+        <div class="step-badge"><div class="sb-val">15</div><div class="sb-unit">mnt</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body" id="sb3">
+        <div class="step-divider"></div>
+        <div class="step-text">Masukkan ke pressure cooker: <strong>babat</strong>, bumbu halus, aromatics, seasoning, <strong>1L air</strong>. Tutup. Hitung <strong>15 mnt setelah pressure build up</strong>.</div>
+        <div class="callout warn">⚠️ Air cuma 1L — lebih sedikit dari Exp 01. Pastikan babat terendam cukup.</div>
+        <div class="callout warn">⚠️ Usus BELUM masuk di step ini.</div>
+        <button class="check-btn" onclick="markDone('s3')">✓ SELESAI</button>
+      </div>
+    </div>
+
+    <div class="step-card" id="s4">
+      <div class="step-head" onclick="toggleStep('s4')">
+        <div class="sn">04</div>
+        <div class="step-meta"><div class="step-name">Release + Masukkan Usus</div><div class="step-desc">Buang pressure · insert usus · tutup lagi</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body" id="sb4">
+        <div class="step-divider"></div>
+        <div class="step-text">Release pressure. Buka tutup, <strong>masukkan usus</strong>. Cek cairan — tambah sedikit air jika terlalu susut. Tutup kembali.</div>
+        <div class="callout warn">⚠️ Tunggu sampai pressure benar-benar aman sebelum buka.</div>
+        <button class="check-btn" onclick="markDone('s4')">✓ SELESAI</button>
+      </div>
+    </div>
+
+    <div class="step-card" id="s5">
+      <div class="step-head" onclick="toggleStep('s5')">
+        <div class="sn">05</div>
+        <div class="step-meta"><div class="step-name">Presto #2 — Babat + Usus</div><div class="step-desc">15 mnt setelah pressure build up</div></div>
+        <div class="step-badge"><div class="sb-val">15</div><div class="sb-unit">mnt</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body" id="sb5">
+        <div class="step-divider"></div>
+        <div class="step-text">Masak kembali, hitung <strong>15 mnt setelah pressure build up kedua</strong>. Total babat ~30 mnt, usus 15 mnt.</div>
+        <div class="callout tip">💡 Natural release = protein lebih relaxed dan tidak alot.</div>
+        <button class="check-btn" onclick="markDone('s5')">✓ SELESAI</button>
+      </div>
+    </div>
+
+    <div class="step-card" id="s6">
+      <div class="step-head" onclick="toggleStep('s6')">
+        <div class="sn">06</div>
+        <div class="step-meta"><div class="step-name">Reduce</div><div class="step-desc">Api sedang · 20–30 mnt · hampir kering</div></div>
+        <div class="step-badge"><div class="sb-val">30</div><div class="sb-unit">mnt</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body" id="sb6">
+        <div class="step-divider"></div>
+        <div class="step-text">Pindahkan ke wok. <strong>Api sedang</strong>. Aduk sesekali. Biarkan liquid susut sampai bumbu <strong>nempel dan coating</strong> protein. ~<strong>20–30 mnt</strong>.</div>
+        <div class="callout warn">⚠️ Liquid lebih sedikit dari Exp 01 — reduce mungkin lebih cepat. Pantau lebih ketat biar tidak gosong.</div>
+        <button class="check-btn" onclick="markDone('s6')">✓ SELESAI</button>
+      </div>
+    </div>
+
+    <div class="step-card" id="s7">
+      <div class="step-head" onclick="toggleStep('s7')">
+        <div class="sn">07</div>
+        <div class="step-meta"><div class="step-name">Taste Check</div><div class="step-desc">Log baseline sebelum sambal</div></div>
+        <div class="done-mark">✓</div>
+      </div>
+      <div class="step-body" id="sb7">
+        <div class="step-divider"></div>
+        <div class="step-text">Matikan api. Coba <strong>babat dan usus secara terpisah</strong>. Catat semua di tab <strong>Log</strong>.</div>
+        <div class="callout tip">💡 Bandingkan langsung dengan Exp 01: lebih depth? Ketumbar terlalu dominan? Salt balance lebih pas?</div>
+        <button class="check-btn" onclick="markDone('s7'); switchTab('log', document.querySelectorAll('.tab-btn')[2])">✓ SELESAI — Ke Log →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ LOG ════ -->
+<div id="pane-log" class="tab-pane">
+
+  <div class="log-section">
+    <div class="ls-title">Run Info</div>
+    <div class="log-field">
+      <label class="log-label">Tanggal Eksperimen</label>
+      <input type="date" class="log-input" id="l-date">
+    </div>
+    <div class="log-field">
+      <label class="log-label">Waktu Reduce Aktual (mnt)</label>
+      <input type="number" class="log-input" id="l-reducetime" placeholder="cth: 20">
+    </div>
+    <div class="log-field">
+      <label class="log-label">Warna Akhir Bumbu</label>
+      <div class="chip-row">
+        <button class="chip-sel" onclick="chipSel(this,'warna')">Kuning terang</button>
+        <button class="chip-sel" onclick="chipSel(this,'warna')">Kuning gelap</button>
+        <button class="chip-sel" onclick="chipSel(this,'warna')">Kecoklatan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="ls-title">Babat — Penilaian</div>
+    <div class="log-field">
+      <label class="log-label">Kelembutan Tekstur</label>
+      <div class="score-row" id="sr-btex"></div>
+      <div class="score-display" id="sd-btex"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Bumbu Meresap</label>
+      <div class="score-row" id="sr-bfla"></div>
+      <div class="score-display" id="sd-bfla"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Aroma</label>
+      <div class="score-row" id="sr-baro"></div>
+      <div class="score-display" id="sd-baro"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Overall Babat</label>
+      <div class="score-row" id="sr-bove"></div>
+      <div class="score-display" id="sd-bove"></div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="ls-title">Usus — Penilaian</div>
+    <div class="log-field">
+      <label class="log-label">Kelembutan Tekstur</label>
+      <div class="score-row" id="sr-utex"></div>
+      <div class="score-display" id="sd-utex"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Bumbu Meresap</label>
+      <div class="score-row" id="sr-ufla"></div>
+      <div class="score-display" id="sd-ufla"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Aroma</label>
+      <div class="score-row" id="sr-uaro"></div>
+      <div class="score-display" id="sd-uaro"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Overall Usus</label>
+      <div class="score-row" id="sr-uove"></div>
+      <div class="score-display" id="sd-uove"></div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="ls-title">Sensory — Keseluruhan</div>
+    <div class="log-field">
+      <label class="log-label">Tingkat Keasinan <span style="color:var(--text-muted);font-size:10px;">(1=hambar · 5=pas · 10=sangat asin)</span></label>
+      <div class="score-row" id="sr-salt"></div>
+      <div class="score-display" id="sd-salt"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Tingkat Kemanisan <span style="color:var(--text-muted);font-size:10px;">(1=tidak terasa · 10=sangat manis)</span></label>
+      <div class="score-row" id="sr-swt"></div>
+      <div class="score-display" id="sd-swt"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Umami / MSG <span style="color:var(--text-muted);font-size:10px;">(1=flat · 10=sangat gurih)</span></label>
+      <div class="score-row" id="sr-msg"></div>
+      <div class="score-display" id="sd-msg"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Ketumbar Terasa <span style="color:var(--text-muted);font-size:10px;">(1=tidak · 10=dominan)</span></label>
+      <div class="score-row" id="sr-ketu"></div>
+      <div class="score-display" id="sd-ketu"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Kunyit Terasa <span style="color:var(--text-muted);font-size:10px;">(1=tidak · 10=dominan)</span></label>
+      <div class="score-row" id="sr-kuny"></div>
+      <div class="score-display" id="sd-kuny"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Tingkat Keasaman</label>
+      <div class="score-row" id="sr-acid"></div>
+      <div class="score-display" id="sd-acid"></div>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Aroma Keseluruhan</label>
+      <div class="score-row" id="sr-arom"></div>
+      <div class="score-display" id="sd-arom"></div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="ls-title">Score Keseluruhan</div>
+    <div class="overall-score-wrap">
+      <div class="os-label">OVERALL SCORE</div>
+      <div class="os-val" id="overall-display">—</div>
+      <div class="os-denom">/ 10</div>
+    </div>
+    <div class="log-field">
+      <div class="score-row" id="sr-ovrl"></div>
+      <div class="score-display" id="sd-ovrl"></div>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="ls-title">Catatan</div>
+    <div class="log-field">
+      <label class="log-label">Rasa Paling Dominan</label>
+      <textarea class="log-textarea" id="l-dominant" placeholder="Apa yang paling terasa? Ketumbar? Kunyit? Manis? Gurih? Lebih asam dari Exp 01?"></textarea>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Perbandingan vs Exp 01</label>
+      <textarea class="log-textarea" id="l-compare" placeholder="Lebih baik? Lebih buruk? Apa yang berubah jelas?"></textarea>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Yang Kurang / Off</label>
+      <textarea class="log-textarea" id="l-lacking" placeholder="Ada rasa yang missing? Sesuatu yang aneh atau tidak enak?"></textarea>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Catatan Proses</label>
+      <textarea class="log-textarea" id="l-process" placeholder="Hal tak terduga? Liquid susut terlalu cepat? Reduce lebih pendek dari prediksi?"></textarea>
+    </div>
+    <div class="log-field">
+      <label class="log-label">Adjustment untuk Run #3</label>
+      <textarea class="log-textarea" id="l-adjust" placeholder="Turunkan ketumbar? Garam masih kurang? Perlu lebih banyak asem?"></textarea>
+    </div>
+  </div>
+
+  <div class="log-section">
+    <div class="ls-title">Foto</div>
+    <div class="photo-note">
+      <div class="pn-icon">📸</div>
+      <p>Foto akan diupload langsung di <strong>GitHub Issue</strong> setelah kamu klik Submit. Tap ikon attachment di GitHub — bisa paste atau pilih dari galeri.</p>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="submitToGitHub()">SUBMIT LOG</button>
+  <div class="submit-sub">
+    Log akan dibuka sebagai <a href="https://github.com/ListyA6/pedesan-rnd/issues" target="_blank">GitHub Issue</a> yang sudah terisi otomatis.<br>
+    Konfirmasi di GitHub → upload foto → Submit Issue.
+  </div>
+
+</div>
+
+<script>
+const scoreGroups = {
+  'btex': 'Babat — Kelembutan Tekstur',
+  'bfla': 'Babat — Bumbu Meresap',
+  'baro': 'Babat — Aroma',
+  'bove': 'Babat — Overall',
+  'utex': 'Usus — Kelembutan Tekstur',
+  'ufla': 'Usus — Bumbu Meresap',
+  'uaro': 'Usus — Aroma',
+  'uove': 'Usus — Overall',
+  'salt': 'Keasinan',
+  'swt':  'Kemanisan',
+  'msg':  'Umami / MSG',
+  'ketu': 'Ketumbar Terasa',
+  'kuny': 'Kunyit Terasa',
+  'acid': 'Keasaman',
+  'arom': 'Aroma Keseluruhan',
+  'ovrl': 'Overall Score'
+};
+
+const scoreDescriptions = {
+  1:'sangat buruk', 2:'buruk', 3:'kurang', 4:'di bawah rata-rata',
+  5:'rata-rata', 6:'cukup baik', 7:'baik', 8:'sangat baik',
+  9:'luar biasa', 10:'sempurna'
+};
+
+const scores = {};
+
+function buildScoreRows() {
+  Object.keys(scoreGroups).forEach(key => {
+    const row = document.getElementById('sr-' + key);
+    if (!row) return;
+    for (let i = 1; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'score-btn';
+      btn.textContent = i;
+      btn.onclick = () => setScore(key, i, btn);
+      row.appendChild(btn);
+    }
+  });
+}
+
+function setScore(key, val, btn) {
+  scores[key] = val;
+  const row = document.getElementById('sr-' + key);
+  row.querySelectorAll('.score-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const disp = document.getElementById('sd-' + key);
+  if (disp) disp.textContent = val + '/10 — ' + (scoreDescriptions[val] || '');
+  if (key === 'ovrl') document.getElementById('overall-display').textContent = val;
+  saveLocal();
+}
+
+const chipSelections = {};
+
+function chipSel(btn, group) {
+  btn.closest('.chip-row').querySelectorAll('.chip-sel').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  chipSelections[group] = btn.textContent;
+  saveLocal();
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleStep(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('sb' + id.slice(1));
+  const open = card.classList.contains('is-open');
+  card.classList.toggle('is-open', !open);
+  body.classList.toggle('is-open', !open);
+}
+
+function markDone(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById('sb' + id.slice(1));
+  const wasDone = card.classList.contains('is-done');
+  card.classList.toggle('is-done');
+  if (!wasDone) { card.classList.remove('is-open'); body.classList.remove('is-open'); }
+  saveDone();
+}
+
+function saveDone() {
+  const done = [];
+  document.querySelectorAll('.step-card.is-done').forEach(c => done.push(c.id));
+  localStorage.setItem('exp02-done', JSON.stringify(done));
+}
+
+function loadDone() {
+  const saved = localStorage.getItem('exp02-done');
+  if (!saved) return;
+  JSON.parse(saved).forEach(id => {
+    const card = document.getElementById(id);
+    const body = document.getElementById('sb' + id.slice(1));
+    if (card) { card.classList.add('is-done'); card.classList.remove('is-open'); }
+    if (body) body.classList.remove('is-open');
+  });
+}
+
+function saveLocal() {
+  const data = {
+    date: document.getElementById('l-date').value,
+    reducetime: document.getElementById('l-reducetime').value,
+    dominant: document.getElementById('l-dominant').value,
+    compare: document.getElementById('l-compare').value,
+    lacking: document.getElementById('l-lacking').value,
+    process: document.getElementById('l-process').value,
+    adjust: document.getElementById('l-adjust').value,
+    scores: { ...scores },
+    chips: { ...chipSelections }
+  };
+  localStorage.setItem('exp02-log', JSON.stringify(data));
+}
+
+function loadLocal() {
+  const raw = localStorage.getItem('exp02-log');
+  if (!raw) return;
+  const d = JSON.parse(raw);
+  if (d.date) document.getElementById('l-date').value = d.date;
+  if (d.reducetime) document.getElementById('l-reducetime').value = d.reducetime;
+  if (d.dominant) document.getElementById('l-dominant').value = d.dominant;
+  if (d.compare) document.getElementById('l-compare').value = d.compare;
+  if (d.lacking) document.getElementById('l-lacking').value = d.lacking;
+  if (d.process) document.getElementById('l-process').value = d.process;
+  if (d.adjust) document.getElementById('l-adjust').value = d.adjust;
+
+  if (d.scores) {
+    Object.entries(d.scores).forEach(([key, val]) => {
+      scores[key] = val;
+      const row = document.getElementById('sr-' + key);
+      if (!row) return;
+      const btn = row.querySelectorAll('.score-btn')[val - 1];
+      if (btn) btn.classList.add('sel');
+      const disp = document.getElementById('sd-' + key);
+      if (disp) disp.textContent = val + '/10 — ' + (scoreDescriptions[val] || '');
+      if (key === 'ovrl') document.getElementById('overall-display').textContent = val;
+    });
+  }
+
+  if (d.chips) {
+    Object.entries(d.chips).forEach(([group, val]) => {
+      chipSelections[group] = val;
+      document.querySelectorAll('.chip-sel').forEach(btn => {
+        if (btn.textContent === val) btn.classList.add('sel');
+      });
+    });
+  }
+}
+
+['l-date','l-reducetime','l-dominant','l-compare','l-lacking','l-process','l-adjust'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', saveLocal);
+});
+
+function formatMarkdown() {
+  const date = document.getElementById('l-date').value || '—';
+  const reducetime = document.getElementById('l-reducetime').value || '—';
+  const warna = chipSelections['warna'] || '—';
+  const dominant = document.getElementById('l-dominant').value || '—';
+  const compare = document.getElementById('l-compare').value || '—';
+  const lacking = document.getElementById('l-lacking').value || '—';
+  const process = document.getElementById('l-process').value || '—';
+  const adjust = document.getElementById('l-adjust').value || '—';
+
+  const sc = (key) => scores[key] ? scores[key] + '/10' : '—';
+
+  return `## EXP #02 Run Log — Babat + Usus Run 2
+**Tanggal:** ${date}
+**Reduce time:** ${reducetime} mnt
+**Warna bumbu:** ${warna}
+
+### Perubahan dari Exp 01
+- Protein: 750g (375 babat + 375 usus)
+- Ketumbar: 6 sdm (2×)
+- Asam Jawa: 1½ sdt (2×)
+- Garam: 3% → 22–23g
+- Air: 1L
+- Pressure babat: 30 mnt total
+
+---
+
+### 🥩 Babat
+| Parameter | Score |
+|-----------|-------|
+| Kelembutan Tekstur | ${sc('btex')} |
+| Bumbu Meresap | ${sc('bfla')} |
+| Aroma | ${sc('baro')} |
+| **Overall Babat** | **${sc('bove')}** |
+
+### 🫀 Usus
+| Parameter | Score |
+|-----------|-------|
+| Kelembutan Tekstur | ${sc('utex')} |
+| Bumbu Meresap | ${sc('ufla')} |
+| Aroma | ${sc('uaro')} |
+| **Overall Usus** | **${sc('uove')}** |
+
+### 📊 Sensory
+| Parameter | Score |
+|-----------|-------|
+| Keasinan | ${sc('salt')} |
+| Kemanisan | ${sc('swt')} |
+| Umami / MSG | ${sc('msg')} |
+| Ketumbar Terasa | ${sc('ketu')} |
+| Kunyit Terasa | ${sc('kuny')} |
+| Keasaman | ${sc('acid')} |
+| Aroma Keseluruhan | ${sc('arom')} |
+
+---
+
+### ⭐ Overall Score: ${sc('ovrl')}
+
+---
+
+### 📝 Catatan
+
+**Rasa dominan:**
+${dominant}
+
+**Perbandingan vs Exp 01:**
+${compare}
+
+**Yang kurang / off:**
+${lacking}
+
+**Catatan proses:**
+${process}
+
+**Adjustment untuk Run #3:**
+${adjust}
+
+---
+
+📸 *Upload foto di bawah ini*
+`;
+}
+
+function submitToGitHub() {
+  const date = document.getElementById('l-date').value || 'no-date';
+  const title = encodeURIComponent('EXP 02 Log — ' + date + ' — Babat + Usus Run 2');
+  const body = encodeURIComponent(formatMarkdown());
+  const label = 'experiment-log';
+  const url = `https://github.com/ListyA6/pedesan-rnd/issues/new?title=${title}&body=${body}&labels=${label}`;
+  window.open(url, '_blank');
+}
+
+buildScoreRows();
+document.getElementById('l-date').valueAsDate = new Date();
+loadDone();
+loadLocal();
+document.getElementById('sb1').classList.add('is-open');
+document.getElementById('s1').classList.add('is-open');
+</script>
+</body>
+</html>
