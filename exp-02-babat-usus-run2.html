@@ -216,6 +216,13 @@ body{
   letter-spacing:3px;cursor:pointer;transition:opacity .2s;margin-top:4px;
 }
 .submit-btn:active{opacity:.85;}
+.download-btn{
+  width:100%;padding:16px;background:none;
+  border:2px solid var(--amber);border-radius:8px;color:var(--amber);
+  font-family:'Anton',sans-serif;font-size:18px;
+  letter-spacing:3px;cursor:pointer;transition:all .2s;margin-top:10px;
+}
+.download-btn:active{background:var(--amber-glow);}
 .submit-sub{
   font-family:'IBM Plex Mono',monospace;font-size:10px;
   color:var(--text-muted);text-align:center;margin-top:10px;line-height:1.6;
@@ -659,10 +666,11 @@ body{
     </div>
   </div>
 
-  <button class="submit-btn" onclick="submitToGitHub()">SUBMIT LOG</button>
+  <button class="download-btn" onclick="downloadReport()">↓ DOWNLOAD REPORT</button>
+  <button class="submit-btn" onclick="submitToGitHub()">SUBMIT LOG → GITHUB</button>
   <div class="submit-sub">
-    Log akan dibuka sebagai <a href="https://github.com/ListyA6/pedesan-rnd/issues" target="_blank">GitHub Issue</a> yang sudah terisi otomatis.<br>
-    Konfirmasi di GitHub → upload foto → Submit Issue.
+    Download .md → share ke Claude untuk analisis.<br>
+    Atau buka sebagai <a href="https://github.com/ListyA6/pedesan-rnd/issues" target="_blank">GitHub Issue</a> → upload foto → Submit.
   </div>
 
 </div>
@@ -915,6 +923,17 @@ function submitToGitHub() {
   const label = 'experiment-log';
   const url = `https://github.com/ListyA6/pedesan-rnd/issues/new?title=${title}&body=${body}&labels=${label}`;
   window.open(url, '_blank');
+}
+
+function downloadReport() {
+  const date = document.getElementById('l-date').value || 'no-date';
+  const content = formatMarkdown();
+  const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'exp-02-log-' + date + '.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 buildScoreRows();
